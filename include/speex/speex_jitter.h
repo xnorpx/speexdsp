@@ -58,7 +58,7 @@ typedef struct _JitterBufferPacket JitterBufferPacket;
 
 /** Definition of an incoming packet */
 struct _JitterBufferPacket {
-   char        *data;       /**< Data bytes contained in the packet */
+   unsigned char *data;     /**< Data bytes contained in the packet */
    spx_uint32_t len;        /**< Length of the packet in bytes */
    spx_uint32_t timestamp;  /**< Timestamp for the packet */
    spx_uint32_t span;       /**< Time covered by the packet (same units as timestamp) */

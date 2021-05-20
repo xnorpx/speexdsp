@@ -441,7 +441,7 @@ EXPORT void jitter_buffer_put(JitterBuffer *jitter, const JitterBufferPacket *pa
       {
          jitter->packets[i].data = packet->data;
       } else {
-         jitter->packets[i].data=(char*)speex_alloc(packet->len);
+         jitter->packets[i].data=(unsigned char*)speex_alloc(packet->len);
          for (j=0;j<packet->len;j++)
             jitter->packets[i].data[j]=packet->data[j];
       }

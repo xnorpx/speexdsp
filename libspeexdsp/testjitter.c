@@ -23,7 +23,7 @@ void synthIn(JitterBufferPacket *in, int idx, int span) {
 }
 
 void jitterFill(JitterBuffer *jb) {
-   char buffer[65536];
+   unsigned char buffer[65536];
    JitterBufferPacket in, out;
    int i;
 
@@ -48,7 +48,7 @@ void jitterFill(JitterBuffer *jb) {
 
 int main()
 {
-   char buffer[65536];
+   unsigned char buffer[65536];
    JitterBufferPacket in, out;
    int i;
 

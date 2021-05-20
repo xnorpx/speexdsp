@@ -34,6 +34,10 @@
 #include "config.h"
 #endif
 
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
+
 #include "speex/speex_resampler.h"
 #include <stdio.h>
 #include <math.h>
@@ -54,7 +58,7 @@ int main()
 
    fin = malloc(INBLOCK*2*sizeof(float));
    for (i=0; i<INBLOCK*2;i++)
-     fin[i] = sinf ((float)i/PERIOD * 2 * M_PI) * 0.9;
+     fin[i] = sinf ((float)i/PERIOD * 2.f * (float)M_PI) * 0.9f;
 
    fout = malloc(INBLOCK*4*sizeof(float));
 
