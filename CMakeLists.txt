@@ -25,6 +25,14 @@ if(HAVE_STDDEF_H)
     set(INCLUDE_STDINT "#include <inttypes.h>")
 endif()
 
+if(NOT WIN32)
+    include(CheckLibraryExists)
+    check_library_exists(m floor "" HAVE_LIBM)
+    if(HAVE_LIBM)
+        list(APPEND SPEEXDSP_REQUIRED_LIBRARIES m)
+    endif()
+endif()
+
 #configure_file(
 #        ${SPEEXDSP_FOLDER}/include/speex/speexdsp_config_types.h.in
 #        ${SPEEXDSP_FOLDER}/include/speex/speexdsp_config_types.h
@@ -50,25 +58,29 @@ add_library(speexdsp ${SPEEXDSP_SOURCE}/resample.c
 
 target_include_directories(speexdsp PUBLIC ${SPEEXDSP_FOLDER}/include PRIVATE ${SPEEXDSP_FOLDER} ${SPEEXDSP_SOURCE} ${SPEEXDSP_FOLDER}/include ${SPEEXDSP_FOLDER}/include/speex)
 target_compile_options(speexdsp PRIVATE "-DHAVE_CONFIG_H")
+target_link_libraries(speexdsp PRIVATE ${SPEEXDSP_REQUIRED_LIBRARIES})
 
-if (NOT BUILD_SHARED_LIBS)
-    add_executable(test_denoise ${SPEEXDSP_SOURCE}/testdenoise.c)
-    target_include_directories(test_denoise PRIVATE ${SPEEXDSP_SOURCE})
-    target_link_libraries(test_denoise PRIVATE speexdsp)
+target_link_options(speexdsp PRIVATE
+        -sEXPORTED_FUNCTIONS=['_speex_echo_state_init'])
 
-    add_executable(test_echo ${SPEEXDSP_SOURCE}/testecho.c)
-    target_include_directories(test_echo PRIVATE ${SPEEXDSP_SOURCE})
-    target_link_libraries(test_echo PRIVATE speexdsp)
-
-    add_executable(test_jitter ${SPEEXDSP_SOURCE}/testjitter.c)
-    target_include_directories(test_jitter PRIVATE ${SPEEXDSP_SOURCE})
-    target_link_libraries(test_jitter PRIVATE speexdsp)
-
-    add_executable(test_resample ${SPEEXDSP_SOURCE}/testresample.c)
-    target_include_directories(test_resample PRIVATE ${SPEEXDSP_SOURCE})
-    target_link_libraries(test_resample PRIVATE speexdsp)
-
-    add_executable(test_resample2 ${SPEEXDSP_SOURCE}/testresample2.c)
-    target_include_directories(test_resample2 PRIVATE ${SPEEXDSP_SOURCE})
-    target_link_libraries(test_resample2 PRIVATE speexdsp)
-endif()
+#if (NOT BUILD_SHARED_LIBS)
+#    add_executable(test_denoise ${SPEEXDSP_SOURCE}/testdenoise.c)
+#    target_include_directories(test_denoise PRIVATE ${SPEEXDSP_SOURCE})
+#    target_link_libraries(test_denoise PRIVATE speexdsp)
+#
+#    add_executable(test_echo ${SPEEXDSP_SOURCE}/testecho.c)
+#    target_include_directories(test_echo PRIVATE ${SPEEXDSP_SOURCE})
+#    target_link_libraries(test_echo PRIVATE speexdsp)
+#
+#    add_executable(test_jitter ${SPEEXDSP_SOURCE}/testjitter.c)
+#    target_include_directories(test_jitter PRIVATE ${SPEEXDSP_SOURCE})
+#    target_link_libraries(test_jitter PRIVATE speexdsp)
+#
+#    add_executable(test_resample ${SPEEXDSP_SOURCE}/testresample.c)
+#    target_include_directories(test_resample PRIVATE ${SPEEXDSP_SOURCE})
+#    target_link_libraries(test_resample PRIVATE speexdsp)
+#
+#    add_executable(test_resample2 ${SPEEXDSP_SOURCE}/testresample2.c)
+#    target_include_directories(test_resample2 PRIVATE ${SPEEXDSP_SOURCE})
+#    target_link_libraries(test_resample2 PRIVATE speexdsp)
+#endif()
